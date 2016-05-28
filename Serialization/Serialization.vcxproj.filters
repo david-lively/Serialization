@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JSONParser.cpp">
+    <ClCompile Include="Tokenizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <Text Include="JSONGrammar.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="JSONParser.h">
+    <ClInclude Include="Tokenizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

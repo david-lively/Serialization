@@ -1,5 +1,5 @@
-#ifndef	JSONPARSER_H
-#define JSONPARSER_H
+#ifndef	TOKENIZER_H
+#define TOKENIZER_H
 
 #include <string>
 #include <map>
@@ -10,7 +10,8 @@ namespace Parsing
 	// from http://www.json.org/
 	enum class TokenType
 	{
-		String
+		Unknown
+		,String
 		,Chars
 		,Char
 		,Number
@@ -22,7 +23,12 @@ namespace Parsing
 		,Digits
 		,E
 		,WhiteSpace
+		,Eof
+		,Symbol
 	};
+
+
+	//std::string to_string(const TokenType t);
 
 	struct Token
 	{
@@ -30,17 +36,18 @@ namespace Parsing
 		int Line;
 		int Column;
 
-
 		std::string Text;
+
+		operator std::string();
 	};
 
 
-	class JSONParser
+	class Tokenizer
 	{
 	public:
-		JSONParser();
-		JSONParser(const std::string& source);
-		~JSONParser();
+		Tokenizer();
+		Tokenizer(const std::string& source);
+		~Tokenizer();
 
 		void Reset(const std::string& source);
 
@@ -55,6 +62,8 @@ namespace Parsing
 		}
 
 	private:
+		// text buffer for read*() methods, avoids a lot of reallocations.
+		std::string m_currentText;
 		// source text
 		std::string m_source;
 
@@ -65,8 +74,9 @@ namespace Parsing
 		int m_column;
 
 		std::string readString();
-		float readFloat();
-		int readInt();
+		std::string readDigits();
+		std::string readChars();
+
 		char readSymbol();
 		char readChar();
 
@@ -75,5 +85,6 @@ namespace Parsing
 		char current();
 	};
 }
+
 
 #endif

@@ -1,5 +1,14 @@
-"this is a string \" with quotes \"!
-and multiline
-" 
+{
+    Type: State;
+    Id: 0;
+    OnDone: { goto 1 }
+    Next: 1;
+}
 
-this comes after the string
+{
+    Type: WaitState;
+    Id: 1;
+    WaitForSeconds: 5.3;
+
+    OnDone: { goto 2 }
+}

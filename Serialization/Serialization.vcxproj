@@ -65,10 +65,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="JSONParser.cpp" />
+    <ClCompile Include="Tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="JSONParser.h" />
+    <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.js" />

@@ -6,9 +6,10 @@
 
 using namespace std;
 
-#include "JSONParser.h"
+#include "Tokenizer.h"
 
 using namespace Parsing;
+
 
 
 
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
 		string filename = args[1];
 		cout << "Loading file \"" << filename << "\"" << endl;
 
-		JSONParser parser;
+		Tokenizer parser;
 
 		string source = readFile(args[1]);
 
@@ -60,7 +61,7 @@ int main(int argc, char** argv)
 		{
 			auto t = parser.GetNextToken();
 
-			cout << "Token: (" << t.Text << ")" << endl;
+			cout << "Token: (" << (string)t << ")" << endl;
 		}
 
 		cout << "Done." << endl;
