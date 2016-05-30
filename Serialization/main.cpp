@@ -44,31 +44,33 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if (argc > 1)
+
+	if (argc < 2)
 	{
-		string filename = args[1];
-		cout << "Loading file \"" << filename << "\"" << endl;
-
-		Tokenizer parser;
-
-		string source = readFile(args[1]);
-
-		cout << "Parsing..." << endl;
-
-		parser.Reset(source);
-
-		while (!parser.IsEOF())
-		{
-			auto t = parser.GetNextToken();
-
-			cout << "Token: (" << (string)t << ")" << endl;
-		}
-
-		cout << "Done." << endl;
+		cerr << "Source file not specified." << endl;
+		exit(0);
 	}
 
+	string filename = args[1];
+	cout << "Loading file \"" << filename << "\"" << endl;
 
+	Tokenizer tokenizer;
 
+	string source = readFile(args[1]);
+
+	cout << "Parsing..." << endl;
+
+	tokenizer.Reset(source);
+
+	while (!tokenizer.IsEOF())
+	{
+		auto t = tokenizer.GetNextToken();
+
+		cout << "Token: (" << (string)t << ")" << endl;
+	}
+
+	cout << "Done." << endl;
 	cout << "Press enter to exit." << endl;
+
 	getchar();
 }

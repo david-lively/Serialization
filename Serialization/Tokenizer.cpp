@@ -131,7 +131,8 @@ Token Tokenizer::GetNextToken()
 	else
 	{
 		cerr << "Unhandled character '" << curr << "'" << endl;
-		readChar();
+		result.Type = TokenType::Unknown;
+		result.Text = readChars();
 	}
 
 	return result;
