@@ -22,11 +22,15 @@ namespace Parsing
 		//, False
 		//, Null
 
+		,Array
+		,CloseArray
 		, CurlyBrace
 		, CloseCurlyBrace
 		, Comma
 		, Colon
 		, Semicolon
+		
+		
 		, String
 		, Chars
 		, Char

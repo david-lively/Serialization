@@ -56,24 +56,29 @@ void Parser::Parse(std::vector<Token>& tokens)
 
 }
 
+#define REQUIRE(tt) \
+{ \
+	auto curr = peek();								\
+if (curr.Type != TokenType::CurlyBrace)			\
+{												\
+	Error("Unexpected token " + (string)curr);	\
+	return nullptr;								\
+}												\
+}
+
 Object* Parser::parseObject()
 {
-	auto curr = peek();
-
-	if (curr.Type != TokenType::CurlyBrace)
-	{
-		Error("'{' expected. Found " + (string)curr);
-		return nullptr;
-	}
+	REQUIRE(CurlyBrace);
 
 	Object* parent = new Object();
 
+	Token curr;
 
 	// stop parsing when we encounter '}'
 	do
 	{
-		curr = get();
-	
+		auto curr = get();
+
 		switch (curr.Type)
 		{
 		case TokenType::CurlyBrace:
@@ -96,14 +101,94 @@ Object* Parser::parseObject()
 			delete parent;
 			return nullptr;
 		}
-	} 
-	while (curr.Type != TokenType::CloseCurlyBrace);
+	} while (curr.Type != TokenType::CloseCurlyBrace);
 
 	return parent;
 }
 
-Pair* Parser::parseMember()
+Value* Parser::parseValue()
 {
+	Value* value = nullptr;
+
+	auto next = peek();
+
+	switch (next.Type)
+	{
+	case TokenType::CurlyBrace:
+		return parseObject();
+
+	case TokenType::Number:
+		return parseNumber();
+
+	case  TokenType::String:
+		return parseString();
+
+	case TokenType::Array:
+		return parseArray();
+	default:
+		Error("Unexpected token " + (string)next);
+		delete value;
+		return nullptr;
+	}
+
+	return value;
 
 }
+
+Pair* Parser::parseMember()
+{
+	REQUIRE(String);
+
+	Pair* pair = new Pair();
+
+
+	auto curr = get();
+
+	pair->Name = curr.Text;
+	pair->Value = parseValue();
+
+	return pair;
+
+}
+
+Array*  Parser::parseArray()  { return nullptr; } 
+
+String* Parser::parseString() { 
+	REQUIRE(String);
+
+	String* s = new String();
+
+	s->Value = get().Text;
+
+	return s;
+} 
+
+Number* Parser::parseNumber() 
+{
+	REQUIRE(Digits);
+
+	Number* num = new Number();
+
+	auto curr = get();
+
+	if (peek().Type == TokenType::Frac)
+	{
+		float val = 0; // to float  (curr.Text)
+
+		auto next = get();
+
+
+
+		
+
+
+	}
+
+
+	return nullptr; 
+
+} 
+
+
+
 

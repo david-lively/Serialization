@@ -39,6 +39,10 @@ namespace Parsing
 
 		Object* parseObject();
 		Pair* parseMember();
+		Value* parseValue();
+		Array* parseArray();
+		String* parseString();
+		Number* parseNumber();
 	};
 
 }

@@ -103,6 +103,7 @@ Token Tokenizer::GetNextToken()
 	char curr = current();
 	char prev = 0;
 
+	//TODO: move this into a std::map<string,std::funcion<std::string()>>
 	if ('\"' == curr)
 	{
 		result.Type = TokenType::String;

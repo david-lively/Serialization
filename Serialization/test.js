@@ -1,14 +1,14 @@
 {
     "Type" : State,
-    "Id" : 0,
+    "Id" : 01233,
     "OnDone" : 
-        { "next":1 },
+        { "next": 456 },
     "Next" : 1
 }
 
 {
     "Type": WaitState,
-    "Id:":1,
-    "WaitForSeconds": 5.3,
+    "Id:": 78,
+    "WaitForSeconds": 910.1112,
     "OnDone": goto_2 
 }

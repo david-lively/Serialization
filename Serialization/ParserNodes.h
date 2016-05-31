@@ -31,14 +31,31 @@ namespace Parsing
 		std::string Value;
 	};
 
-	struct Integer : public Value
+	struct Number : public Value
 	{
-		int Value;
-	};
+		enum class Type
+		{
+			Integer
+			,Float
+		};
 
-	struct Float : public Value
-	{
-		float Value;
+		char data[sizeof(double)];
+
+		template<typename T>
+		T Get()
+		{
+			T* ptr = (T*)data;
+
+			return *ptr;
+		}
+
+		template<typename T>
+		void Set(const T& val)
+		{
+			T* target = (T*)data;
+
+			*target = val;
+		}
 	};
 
 	struct Chars : public String
@@ -63,7 +80,7 @@ namespace Parsing
 		}
 	};
 
-	struct Object : public ParseNode
+	struct Object : public Value
 	{
 		std::vector<Pair*> members;
 		std::vector<Object*> objects;
