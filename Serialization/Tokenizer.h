@@ -11,20 +11,36 @@ namespace Parsing
 	enum class TokenType
 	{
 		Unknown
-		,String
-		,Chars
-		,Char
-		,Number
-		,Int
-		,Frac
-		,Exp
-		,Digit
-		,Digit1Through9
-		,Digits
-		,E
-		,WhiteSpace
-		,Eof
-		,Symbol
+
+		//, Object
+		//, Members
+		//, Pair
+		//, Value
+		//, Array
+		//, Elements
+		//, True
+		//, False
+		//, Null
+
+		, CurlyBrace
+		, CloseCurlyBrace
+		, Comma
+		, Colon
+		, Semicolon
+		, String
+		, Chars
+		, Char
+		, Number
+		, Int
+		, Frac
+		, Exp
+		, Digit
+		, Digit1Through9
+		, Digits
+		, E
+		, WhiteSpace
+		, Eof
+		, Symbol
 	};
 
 
@@ -58,7 +74,6 @@ namespace Parsing
 		void Error(const std::string& message)
 		{
 			std::cerr << "ERROR (" << m_line << "," << m_column << ") " << message << std::endl;
-
 		}
 
 	private:

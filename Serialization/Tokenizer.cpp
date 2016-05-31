@@ -35,7 +35,7 @@ bool Tokenizer::IsEOF()
 
 string Tokenizer::readString()
 {
- 	bool done = false;
+	bool done = false;
 
 	++m_position;
 
@@ -113,6 +113,31 @@ Token Tokenizer::GetNextToken()
 		result.Type = TokenType::Frac;
 		result.Text = readChar();
 	}
+	else if (':' == curr)
+	{
+		result.Type = TokenType::Colon;
+		result.Text = readChar();
+	}
+	else if (';' == curr)
+	{
+		result.Type = TokenType::Semicolon;
+		result.Text = readChar();
+	}
+	else if (',' == curr)
+	{
+		result.Type = TokenType::Comma;
+		result.Text = readChar();
+	}
+	else if ('{' == curr)
+	{
+		result.Type = TokenType::CurlyBrace;
+		result.Text = readChar();
+	}
+	else if ('}' == curr)
+	{
+		result.Type = TokenType::CloseCurlyBrace;
+		result.Text = readChar();
+	}
 	else if (isdigit(curr))
 	{
 		result.Type = TokenType::Digits;
@@ -152,7 +177,7 @@ char Tokenizer::readChar()
 		++m_column;
 
 	++m_position;
-	
+
 	return curr;
 }
 
@@ -184,21 +209,30 @@ map<TokenType, string> initTokenTypeNames()
 {
 	map<TokenType, string> names;
 
-	names[TokenType::Unknown		] = "Unknown"		;
-	names[TokenType::String			] = "String"		;
-	names[TokenType::Chars			] = "Chars"			;
-	names[TokenType::Char			] = "Char"			;
-	names[TokenType::Number			] = "Number"		;
-	names[TokenType::Int			] = "Int"			;
-	names[TokenType::Frac			] = "Frac"			;
-	names[TokenType::Exp			] = "Exp"			;
-	names[TokenType::Digit			] = "Digit"			;
-	names[TokenType::Digit1Through9	] = "Digit1Through9";
-	names[TokenType::Digits			] = "Digits"		;
-	names[TokenType::E				] = "E"				;
-	names[TokenType::WhiteSpace		] = "WhiteSpace"	;
-	names[TokenType::Eof			] = "Eof"			;
-	names[TokenType::Symbol			] = "Symbol";
+#define ADDNAME(name) names[TokenType:: ## name] = #name;
+
+	ADDNAME(Unknown);
+	ADDNAME(String);
+	ADDNAME(Chars);
+	ADDNAME(Char);
+	ADDNAME(Number);
+	ADDNAME(Int);
+	ADDNAME(Frac);
+	ADDNAME(Exp);
+	ADDNAME(Digit);
+	ADDNAME(Digit1Through9);
+	ADDNAME(Digits);
+	ADDNAME(E);
+	ADDNAME(WhiteSpace);
+	ADDNAME(Eof);
+	ADDNAME(Symbol);
+	ADDNAME(CurlyBrace);
+	ADDNAME(CloseCurlyBrace);
+	ADDNAME(Comma);
+	ADDNAME(Semicolon);
+	ADDNAME(Colon);
+
+#undef ADDNAME
 
 	return names;
 }

@@ -2,35 +2,19 @@
 #define PARSER_H
 
 #include "Tokenizer.h"
+#include "ParserNodes.h"
 
 #include <vector>
 #include <map>
+#include <set>
+#include <functional>
+
+#define PARSE(t) ParseNode* Parser::parse ## t()
+#define PARSE_STUB(t) PARSE(t) { return nullptr; }
+
 
 namespace Parsing
 {
-	enum class NodeType
-	{
-		Object
-		,Members
-		,Pair
-		,String
-		,Value
-		,Array
-		,Elements
-		,Number
-		,True
-		,False
-		,Null
-	};
-
-	struct ParseNode
-	{
-		TokenType TType;
-		NodeType NType;
-
-		std::map<TokenType, ParseNode*> Nodes;
-	};
-
 	class Parser
 	{
 	public:
@@ -41,25 +25,20 @@ namespace Parsing
 
 		void Parse(std::vector<Token>& tokens);
 		void Error(const std::string& message);
-	
+
+		Token get() { return m_tokens[m_position++]; }
+		Token peek() { return m_tokens[m_position]; }
+
 	private:
-#define PARSE(t) ParseNode* Parser::parse ## t(std::vector<Token>& tokens, int& index)
+		int m_position = 0;
+		std::vector<Token> m_tokens;
 
-		PARSE(Symbol);
-		PARSE(Object);
-		PARSE(Members );
-		PARSE(Pair	  );
-		PARSE(String  );
-		PARSE(Value	  );
-		PARSE(Array	  );
-		PARSE(Elements);
-		PARSE(Number  );
-		PARSE(True	  );
-		PARSE(False	  );
-		PARSE(Null	  );
-			/*
-		*/
+		Object* m_root = nullptr;
 
+		bool isEOF() { return m_position >= m_tokens.size(); }
+
+		Object* parseObject();
+		Pair* parseMember();
 	};
 
 }

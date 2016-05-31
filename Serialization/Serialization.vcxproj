@@ -66,11 +66,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParserNodes.cpp" />
+    <ClCompile Include="ParseTree.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ParseStates.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="ParserNodes.h" />
     <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
