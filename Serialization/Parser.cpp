@@ -43,6 +43,11 @@ void Parser::Parse(std::vector<Token>& tokens)
 
 	while (!isEOF())
 	{
+		auto next = peek();
+
+		if (TokenType::Eof == next.Type)
+			break;
+
 		auto obj = parseObject();
 
 		if (nullptr == obj)
@@ -74,12 +79,11 @@ if (curr.Type != TokenType:: ## tt)			\
 
 Object* Parser::parseObject()
 {
-	REQUIRE(CurlyBrace);
+	ACCEPT(CurlyBrace);
 
 	Object* parent = new Object();
 
 	// get the curly brace
-	Token curr = get();
 	bool done = false;
 
 	// stop parsing when we encounter '}'
@@ -98,11 +102,10 @@ Object* Parser::parseObject()
 			break;
 
 		case TokenType::Comma:
-			curr = get();
+			get();
 			break;
 
 		case TokenType::CloseCurlyBrace:
-			get();
 			done = true;
 			break;
 
@@ -113,13 +116,13 @@ Object* Parser::parseObject()
 		}
 	} while (!done); //  next.Type != TokenType::CloseCurlyBrace);
 
+	ACCEPT(CloseCurlyBrace);
+
 	return parent;
 }
 
 Value* Parser::parseValue()
 {
-	Value* value = nullptr;
-
 	auto next = peek();
 
 	switch (next.Type)
@@ -142,12 +145,8 @@ Value* Parser::parseValue()
 
 	default:
 		Error("Unexpected token " + (string)next);
-		delete value;
 		return nullptr;
 	}
-
-	return value;
-
 }
 
 Pair* Parser::parseMember()
@@ -178,7 +177,7 @@ Array*  Parser::parseArray()
 
 	Array* arr = new Array();
 
-	while (!done)
+	do
 	{
 		auto next = peek();
 	
@@ -194,9 +193,12 @@ Array*  Parser::parseArray()
 
 		default:
 			arr->elements.push_back(parseValue());
+			break;
 		}
 
-	}
+	} while (!done);
+
+	ACCEPT(CloseArray);
 
 	return arr;
 
