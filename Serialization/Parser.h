@@ -43,6 +43,7 @@ namespace Parsing
 		Array* parseArray();
 		String* parseString();
 		Number* parseNumber();
+		Chars* parseChars();
 	};
 
 }

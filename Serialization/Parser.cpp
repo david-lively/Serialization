@@ -59,12 +59,18 @@ void Parser::Parse(std::vector<Token>& tokens)
 #define REQUIRE(tt) \
 { \
 	auto curr = peek();								\
-if (curr.Type != TokenType::CurlyBrace)			\
+if (curr.Type != TokenType:: ## tt)			\
 {												\
 	Error("Unexpected token " + (string)curr);	\
 	return nullptr;								\
 }												\
 }
+
+#define ACCEPT(tt) \
+{ \
+	REQUIRE(tt) \
+	get();		\
+}				
 
 Object* Parser::parseObject()
 {
@@ -72,14 +78,16 @@ Object* Parser::parseObject()
 
 	Object* parent = new Object();
 
-	Token curr;
+	// get the curly brace
+	Token curr = get();
+	bool done = false;
 
 	// stop parsing when we encounter '}'
 	do
 	{
-		auto curr = get();
+		auto next = peek();
 
-		switch (curr.Type)
+		switch (next.Type)
 		{
 		case TokenType::CurlyBrace:
 			parent->objects.push_back(parseObject());
@@ -94,14 +102,16 @@ Object* Parser::parseObject()
 			break;
 
 		case TokenType::CloseCurlyBrace:
+			get();
+			done = true;
 			break;
 
 		default:
-			Error("Unexpected token: " + (string)curr);
+			Error("Unexpected token: " + (string)next);
 			delete parent;
 			return nullptr;
 		}
-	} while (curr.Type != TokenType::CloseCurlyBrace);
+	} while (!done); //  next.Type != TokenType::CloseCurlyBrace);
 
 	return parent;
 }
@@ -117,14 +127,19 @@ Value* Parser::parseValue()
 	case TokenType::CurlyBrace:
 		return parseObject();
 
+	case TokenType::Digits:
 	case TokenType::Number:
 		return parseNumber();
 
 	case  TokenType::String:
 		return parseString();
 
+	case TokenType::Chars:
+		return parseChars();
+
 	case TokenType::Array:
 		return parseArray();
+
 	default:
 		Error("Unexpected token " + (string)next);
 		delete value;
@@ -145,6 +160,9 @@ Pair* Parser::parseMember()
 	auto curr = get();
 
 	pair->Name = curr.Text;
+
+	ACCEPT(Colon);
+
 	pair->Value = parseValue();
 
 	return pair;
@@ -163,6 +181,17 @@ String* Parser::parseString() {
 	return s;
 } 
 
+Chars* Parser::parseChars() {
+	REQUIRE(Chars);
+
+	auto* s = new Chars();
+
+	s->Value = get().Text;
+
+	return s;
+}
+
+
 Number* Parser::parseNumber() 
 {
 	REQUIRE(Digits);
@@ -171,22 +200,24 @@ Number* Parser::parseNumber()
 
 	auto curr = get();
 
+	int whole = atoi(curr.Text.c_str());
+
+	num->Set(whole);
+
 	if (peek().Type == TokenType::Frac)
 	{
-		float val = 0; // to float  (curr.Text)
+		ACCEPT(Frac);
 
-		auto next = get();
+		curr = get();
+		int n = atoi(curr.Text.c_str());
+		float frac = pow(10, -1.f * curr.Text.length());
 
-
-
-		
+		num->Set(whole + n * frac);
 
 
 	}
 
-
-	return nullptr; 
-
+	return num;
 } 
 
 

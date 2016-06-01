@@ -7,6 +7,7 @@
 using namespace std;
 
 #include "Tokenizer.h"
+#include "Parser.h"
 
 using namespace Parsing;
 
@@ -62,12 +63,20 @@ int main(int argc, char** argv)
 
 	tokenizer.Reset(source);
 
+	vector<Token> tokens;
+
 	while (!tokenizer.IsEOF())
 	{
 		auto t = tokenizer.GetNextToken();
 
+		tokens.push_back(t);
+
 		cout << "Token: (" << (string)t << ")" << endl;
 	}
+
+	Parser parser;
+
+	parser.Parse(tokens);
 
 	cout << "Done." << endl;
 	cout << "Press enter to exit." << endl;

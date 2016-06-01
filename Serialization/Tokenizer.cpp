@@ -198,7 +198,7 @@ string Tokenizer::readChars()
 {
 	m_currentText.clear();
 
-	while (!IsEOF() && (isalpha(current()) || current() == '_'))
+	while (!IsEOF() && !iswspace(current()))
 	{
 		m_currentText += readChar();
 	}
