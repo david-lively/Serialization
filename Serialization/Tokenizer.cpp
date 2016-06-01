@@ -139,6 +139,17 @@ Token Tokenizer::GetNextToken()
 		result.Type = TokenType::CloseCurlyBrace;
 		result.Text = readChar();
 	}
+	else if ('[' == curr)
+	{
+		result.Type = TokenType::Array;
+		result.Text = readChar();
+	}
+	else if (']' == curr)
+	{
+		result.Type = TokenType::CloseArray;
+		result.Text = readChar();
+	}
+
 	else if (isdigit(curr))
 	{
 		result.Type = TokenType::Digits;
@@ -232,6 +243,8 @@ map<TokenType, string> initTokenTypeNames()
 	ADDNAME(Comma);
 	ADDNAME(Semicolon);
 	ADDNAME(Colon);
+	ADDNAME(Array);
+	ADDNAME(CloseArray);
 
 #undef ADDNAME
 

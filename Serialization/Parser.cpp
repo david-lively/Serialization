@@ -70,7 +70,7 @@ if (curr.Type != TokenType:: ## tt)			\
 { \
 	REQUIRE(tt) \
 	get();		\
-}				
+}
 
 Object* Parser::parseObject()
 {
@@ -169,9 +169,40 @@ Pair* Parser::parseMember()
 
 }
 
-Array*  Parser::parseArray()  { return nullptr; } 
+Array*  Parser::parseArray()  
+{
 
-String* Parser::parseString() { 
+	ACCEPT(Array);
+
+	bool done = false;
+
+	Array* arr = new Array();
+
+	while (!done)
+	{
+		auto next = peek();
+	
+		switch (next.Type)
+		{
+		case TokenType::CloseArray:
+			done = true;
+			break;
+
+		case TokenType::Comma:
+			get();
+			break;
+
+		default:
+			arr->elements.push_back(parseValue());
+		}
+
+	}
+
+	return arr;
+
+}
+
+String* Parser::parseString() {
 	REQUIRE(String);
 
 	String* s = new String();
@@ -179,7 +210,7 @@ String* Parser::parseString() {
 	s->Value = get().Text;
 
 	return s;
-} 
+}
 
 Chars* Parser::parseChars() {
 	REQUIRE(Chars);
@@ -192,7 +223,7 @@ Chars* Parser::parseChars() {
 }
 
 
-Number* Parser::parseNumber() 
+Number* Parser::parseNumber()
 {
 	REQUIRE(Digits);
 
@@ -218,7 +249,7 @@ Number* Parser::parseNumber()
 	}
 
 	return num;
-} 
+}
 
 
 

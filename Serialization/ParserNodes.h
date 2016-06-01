@@ -14,7 +14,7 @@ namespace Parsing
 	enum class NodeType
 	{
 		Object
-		,KeyValue
+		, KeyValue
 	};
 
 	struct ParseNode
@@ -36,7 +36,7 @@ namespace Parsing
 		enum class Type
 		{
 			Integer
-			,Float
+			, Float
 		};
 
 		char data[sizeof(double)];
@@ -66,6 +66,16 @@ namespace Parsing
 	struct Array : public Value
 	{
 		std::vector<Value*> elements;
+
+		~Array()
+		{
+			for (auto el : elements) {
+				if (nullptr != el)
+					delete el;
+			}
+
+			elements.clear();
+		}
 	};
 
 	struct Pair
